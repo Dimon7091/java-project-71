@@ -4,6 +4,7 @@ plugins {
     application
     kotlin("jvm") version "2.2.0"
     kotlin("kapt") version "2.2.0"
+    checkstyle
 }
 
 group = "hexlet.code"
