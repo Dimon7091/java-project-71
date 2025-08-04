@@ -39,6 +39,8 @@ public class Differ {
             char c2 = s2.toString().charAt(1);
             return Character.compare(c1, c2);
         });
+        preparedList.add(0, "{");
+        preparedList.add(preparedList.size(), "}");
         for (var element : preparedList) {
             System.out.println(element);
 
