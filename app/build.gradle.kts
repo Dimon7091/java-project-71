@@ -5,6 +5,14 @@ plugins {
     kotlin("jvm") version "2.2.0"
     kotlin("kapt") version "2.2.0"
     checkstyle
+    id("org.sonarqube") version "6.2.0.5505"
+}
+sonar {
+    properties {
+        property("sonar.projectKey", "Dimon7091_java-project-71")
+        property("sonar.organization", "dmitry-gorbunov-linter")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
 }
 
 group = "hexlet.code"
