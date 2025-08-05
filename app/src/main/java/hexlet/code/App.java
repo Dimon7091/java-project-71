@@ -35,7 +35,7 @@ public class App implements Runnable {
             filemap1 = mapper.readValue(file1,
                     new TypeReference<Map<String, Object>>() { });
             System.out.println(filemap1);
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.err.println("Файл 1 не найден");
         }
         try {

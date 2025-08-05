@@ -1,10 +1,11 @@
 package hexlet.code;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Differ {
-    public static void generate(Map<String, Object> map1, Map<String, Object> map2) {
+    public static List<Object> generate(Map<String, Object> map1, Map<String, Object> map2) {
 
         var preparedList = new ArrayList<>();
         for (Map.Entry<String, Object> entry1: map1.entrySet()) {
@@ -46,5 +47,6 @@ public class Differ {
             System.out.println(element);
 
         }
+        return preparedList;
     }
 }
