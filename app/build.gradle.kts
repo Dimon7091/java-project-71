@@ -38,4 +38,3 @@ tasks.test {
 application {
     mainClass = "hexlet.code.App"
 }
-
