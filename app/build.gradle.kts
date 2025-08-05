@@ -6,6 +6,7 @@ plugins {
     kotlin("kapt") version "2.2.0"
     checkstyle
     id("org.sonarqube") version "6.2.0.5505"
+    jacoco
 }
 sonar {
     properties {
@@ -13,6 +14,11 @@ sonar {
         property("sonar.organization", "dmitry-gorbunov-linter")
         property("sonar.host.url", "https://sonarcloud.io")
     }
+}
+
+jacoco {
+    toolVersion = "0.8.13"
+    reportsDirectory = layout.buildDirectory.dir("customJacocoReportDir")
 }
 
 group = "hexlet.code"
@@ -34,7 +40,19 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
 }
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // отчет зависит от тестов
+    reports {
+        xml.required.set(true)  // нужен XML-отчет для SonarQube
+        html.required.set(true) // полезный HTML-отчет
+        csv.required.set(false)
+    }
+    // если нужно, укажите дополнительные пути к исходникам и классам
+}
+
 application {
     mainClass = "hexlet.code.App"
 }
