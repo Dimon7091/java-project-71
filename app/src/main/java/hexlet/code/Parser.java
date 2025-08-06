@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public class Parser {
-    public static Map<String, Object> fromJson(String filepath) {
+    public static Map<String, Object> formJsonYaml(String filepath) {
         String format = filepath.substring(filepath.length() - 4, filepath.length());
         Map<String, Object> filemap = null;
         if (format.equals("json")) {

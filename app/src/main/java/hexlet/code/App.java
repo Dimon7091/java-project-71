@@ -22,8 +22,8 @@ public class App implements Runnable {
     @Override
     public void run() {
 
-        var filemap1 = Parser.fromJson(filepath1);
-        var filemap2 = Parser.fromJson(filepath2);
+        var filemap1 = Parser.formJsonYaml(filepath1);
+        var filemap2 = Parser.formJsonYaml(filepath2);
         Differ.generate(filemap1, filemap2);
     }
 
