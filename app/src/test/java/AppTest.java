@@ -1,56 +1,60 @@
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.Differ;
 import hexlet.code.Parser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class AppTest {
-    Map<String, Object> filemap1 = null;
-    Map<String, Object> filemap2 = null;
-    ArrayList<String> expected = new ArrayList<>();
-
+    Map<String, Object> parsedFile1 = null;
+    Map<String, Object> parsedFile2 = null;
+    ArrayList<String> expectedList = new ArrayList<>();
 
     @BeforeEach
     public void preparationOfFixtures() throws Exception {
-        File file1 = new File("./src/test/resources/fixtures/file1.json");
-        File file2 = new File("./src/test/resources/fixtures/file2.json");
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            filemap1 = mapper.readValue(file1,
-                    new TypeReference<Map<String, Object>>() { });
-            System.out.println(filemap1);
-        } catch (IOException e) {
-            System.err.println("Файл 1 не найден");
-        }
-        try {
-            filemap2 = mapper.readValue(file2,
-                    new TypeReference<Map<String, Object>>() { });
-            System.out.println(filemap2);
-        } catch (IOException e) {
-            System.err.println("Файл 2 не найден");
-        }
+        parsedFile1 = new LinkedHashMap<>();
+        parsedFile2 = new LinkedHashMap<>();
 
-        expected.add("{");
-        expected.add(" -follow: false");
-        expected.add("  host: hexlet.io");
-        expected.add(" -proxy: 123.234.53.22");
-        expected.add(" -timeout: 50");
-        expected.add(" +timeout: 20");
-        expected.add(" +verbose: true");
-        expected.add("}");
+        parsedFile1.put("host", "hexlet.io");
+        parsedFile1.put("timeout", 50);
+        parsedFile1.put("proxy", "123.234.53.22");
+        parsedFile1.put("follow", false);
 
+        parsedFile2.put("timeout", 20);
+        parsedFile2.put("verbose", true);
+        parsedFile2.put("host", "hexlet.io");
+
+        expectedList.clear();
+        expectedList.add("{");
+        expectedList.add(" -follow: false");
+        expectedList.add("  host: hexlet.io");
+        expectedList.add(" -proxy: 123.234.53.22");
+        expectedList.add(" -timeout: 50");
+        expectedList.add(" +timeout: 20");
+        expectedList.add(" +verbose: true");
+        expectedList.add("}");
+    }
+
+    @Test
+    public void testParserJson() {
+        var actual = Parser.formJsonYaml("./src/test/resources/fixtures/file1.json");
+        var expected = parsedFile1;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testParsedYaml() {
+        var actual = Parser.formJsonYaml("./src/test/resources/fixtures/file1.yaml");
+        var expected = parsedFile1;
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testDiffer() throws Exception {
-        var actual = Differ.generate(filemap1, filemap2);
+        var actual = Differ.generate(parsedFile1, parsedFile2);
+        var expected = expectedList;
         assertEquals(expected, actual, "Не совпадает с ожиданием");
     }
 }
