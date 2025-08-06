@@ -35,8 +35,8 @@ dependencies {
     annotationProcessor ("info.picocli:picocli-codegen:4.7.7")
     kapt("info.picocli:picocli-codegen:4.7.7")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.3")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.3")
 }
-
 
 tasks.test {
     useJUnitPlatform()
