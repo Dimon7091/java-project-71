@@ -3,20 +3,19 @@ import hexlet.code.Parser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class AppTest {
-    Map<String, Object> parsedFile1 = null;
-    Map<String, Object> parsedFile2 = null;
-    ArrayList<String> expectedList = new ArrayList<>();
+    Map<String, Object> parsedFile1 = new LinkedHashMap<>();
+    Map<String, Object> parsedFile2 = new LinkedHashMap<>();
+    String simpleFixture;
+
 
     @BeforeEach
     public void preparationOfFixtures() throws Exception {
-        parsedFile1 = new LinkedHashMap<>();
-        parsedFile2 = new LinkedHashMap<>();
-
         parsedFile1.put("host", "hexlet.io");
         parsedFile1.put("timeout", 50);
         parsedFile1.put("proxy", "123.234.53.22");
@@ -26,15 +25,7 @@ public class AppTest {
         parsedFile2.put("verbose", true);
         parsedFile2.put("host", "hexlet.io");
 
-        expectedList.clear();
-        expectedList.add("{");
-        expectedList.add(" -follow: false");
-        expectedList.add("  host: hexlet.io");
-        expectedList.add(" -proxy: 123.234.53.22");
-        expectedList.add(" -timeout: 50");
-        expectedList.add(" +timeout: 20");
-        expectedList.add(" +verbose: true");
-        expectedList.add("}");
+        simpleFixture = Files.readString(Paths.get("src/test/resources/fixtures/simpleResult.txt"));
     }
 
     @Test
@@ -54,7 +45,11 @@ public class AppTest {
     @Test
     public void testDiffer() throws Exception {
         var actual = Differ.generate(parsedFile1, parsedFile2);
-        var expected = expectedList;
-        assertEquals(expected, actual, "Не совпадает с ожиданием");
+        var expected = simpleFixture;
+        assertEquals(expected, actual);
+    }
+    @Test
+    public void testDifferRecursive() {
+
     }
 }

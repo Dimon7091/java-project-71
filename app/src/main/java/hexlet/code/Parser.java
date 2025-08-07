@@ -18,7 +18,6 @@ public class Parser {
             try {
                 filemap = jsonMapper.readValue(file1,
                         new TypeReference<Map<String, Object>>() { });
-                System.out.println(filemap);
             } catch (IOException e) {
                 System.err.println("Файл 1 не найден");
             }
@@ -28,7 +27,6 @@ public class Parser {
             try {
                 filemap = yamlMapper.readValue(file1,
                         new TypeReference<Map<String, Object>>() { });
-                System.out.println(filemap);
             } catch (IOException e) {
                 System.err.println("Файл 1 не найден");
             }
