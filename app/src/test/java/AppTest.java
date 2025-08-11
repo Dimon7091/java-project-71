@@ -12,8 +12,11 @@ import java.util.Map;
 public class AppTest {
     Map<String, Object> parsedFile1 = new LinkedHashMap<>();
     Map<String, Object> parsedFile2 = new LinkedHashMap<>();
-    Map<String, Object> parsedFile3recursive = new LinkedHashMap<>();
-    Map<String, Object> parsedFile4recursive = new LinkedHashMap<>();
+    Map<String, Object> parsedFile3recursiveJson = new LinkedHashMap<>();
+    Map<String, Object> parsedFile4recursiveJson = new LinkedHashMap<>();
+    Map<String, Object> parsedFile3recursiveYaml = new LinkedHashMap<>();
+    Map<String, Object> parsedFile4recursiveYaml = new LinkedHashMap<>();
+
     String simpleFixture;
     String recursiveFixture;
 
@@ -28,8 +31,10 @@ public class AppTest {
         parsedFile2.put("verbose", true);
         parsedFile2.put("host", "hexlet.io");
 
-        parsedFile3recursive = Parser.formJsonYaml("./src/test/resources/fixtures/file3recursive.json");
-        parsedFile4recursive = Parser.formJsonYaml("./src/test/resources/fixtures/file4recursive.json");
+        parsedFile3recursiveJson = Parser.formJsonYaml("./src/test/resources/fixtures/file3recursive.json");
+        parsedFile4recursiveJson = Parser.formJsonYaml("./src/test/resources/fixtures/file4recursive.json");
+        parsedFile3recursiveYaml = Parser.formJsonYaml("./src/test/resources/fixtures/file3recursive.yaml");
+        parsedFile4recursiveYaml = Parser.formJsonYaml("./src/test/resources/fixtures/file4recursive.yaml");
         //Ожидающие результаты
         simpleFixture = Files.readString(Paths.get("src/test/resources/fixtures/simpleResult.txt"));
         recursiveFixture = Files.readString(Paths.get("src/test/resources/fixtures/recursiveResult.txt"));
@@ -55,9 +60,16 @@ public class AppTest {
         var expected = simpleFixture;
         assertEquals(expected, actual);
     }
+
     @Test
-    public void testDifferRecursive() {
-        var actual = Differ.generate(parsedFile3recursive, parsedFile4recursive);
+    public void testDifferRecursiveJson() {
+        var actual = Differ.generate(parsedFile3recursiveJson, parsedFile4recursiveJson);
+        var expected  = recursiveFixture;
+        assertEquals(expected, actual);
+    }
+    @Test
+    public void testDifferRecursiveYaml() {
+        var actual = Differ.generate(parsedFile3recursiveYaml, parsedFile4recursiveYaml);
         var expected  = recursiveFixture;
         assertEquals(expected, actual);
     }
