@@ -17,7 +17,7 @@ public class App implements Runnable {
     private String filepath1;
     @Parameters(index = "1", description = "path to second file")
     private String filepath2;
-    @Option(names = {"-f", "--format"}, description = "output format [default: stylish]")
+    @Option(names = {"-f", "--format"}, description = "output format [default: stylish]", defaultValue = "stylish")
     private String format;
     @Override
     public void run() {

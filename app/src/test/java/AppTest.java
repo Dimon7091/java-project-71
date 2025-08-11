@@ -3,6 +3,7 @@ import hexlet.code.Parser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
@@ -11,8 +12,10 @@ import java.util.Map;
 public class AppTest {
     Map<String, Object> parsedFile1 = new LinkedHashMap<>();
     Map<String, Object> parsedFile2 = new LinkedHashMap<>();
+    Map<String, Object> parsedFile3recursive = new LinkedHashMap<>();
+    Map<String, Object> parsedFile4recursive = new LinkedHashMap<>();
     String simpleFixture;
-
+    String recursiveFixture;
 
     @BeforeEach
     public void preparationOfFixtures() throws Exception {
@@ -25,7 +28,11 @@ public class AppTest {
         parsedFile2.put("verbose", true);
         parsedFile2.put("host", "hexlet.io");
 
+        parsedFile3recursive = Parser.formJsonYaml("./src/test/resources/fixtures/file3recursive.json");
+        parsedFile4recursive = Parser.formJsonYaml("./src/test/resources/fixtures/file4recursive.json");
+        //Ожидающие результаты
         simpleFixture = Files.readString(Paths.get("src/test/resources/fixtures/simpleResult.txt"));
+        recursiveFixture = Files.readString(Paths.get("src/test/resources/fixtures/recursiveResult.txt"));
     }
 
     @Test
@@ -43,13 +50,15 @@ public class AppTest {
     }
 
     @Test
-    public void testDiffer() throws Exception {
+    public void testDiffer() {
         var actual = Differ.generate(parsedFile1, parsedFile2);
         var expected = simpleFixture;
         assertEquals(expected, actual);
     }
     @Test
     public void testDifferRecursive() {
-
+        var actual = Differ.generate(parsedFile3recursive, parsedFile4recursive);
+        var expected  = recursiveFixture;
+        assertEquals(expected, actual);
     }
 }
