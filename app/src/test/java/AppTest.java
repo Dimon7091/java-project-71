@@ -12,13 +12,15 @@ import java.util.Map;
 public class AppTest {
     Map<String, Object> parsedFile1 = new LinkedHashMap<>();
     Map<String, Object> parsedFile2 = new LinkedHashMap<>();
-    Map<String, Object> parsedFile3recursiveJson = new LinkedHashMap<>();
-    Map<String, Object> parsedFile4recursiveJson = new LinkedHashMap<>();
-    Map<String, Object> parsedFile3recursiveYaml = new LinkedHashMap<>();
-    Map<String, Object> parsedFile4recursiveYaml = new LinkedHashMap<>();
 
-    String simpleFixture;
-    String recursiveFixture;
+    String filePath1simple = "src/test/resources/fixtures/file1.json";
+    String filePath2simple = "src/test/resources/fixtures/file2.json";
+    String filePath3recursiveJson = "src/test/resources/fixtures/file3recursive.json";
+    String filePath4recursiveJson = "src/test/resources/fixtures/file4recursive.json";
+    String filePath3recursiveYaml = "src/test/resources/fixtures/file3recursive.yaml";
+    String filePath4recursiveYaml = "src/test/resources/fixtures/file4recursive.yaml";
+    String simpleResult;
+    String recursiveResult;
 
     @BeforeEach
     public void preparationOfFixtures() throws Exception {
@@ -31,13 +33,9 @@ public class AppTest {
         parsedFile2.put("verbose", true);
         parsedFile2.put("host", "hexlet.io");
 
-        parsedFile3recursiveJson = Parser.formJsonYaml("./src/test/resources/fixtures/file3recursive.json");
-        parsedFile4recursiveJson = Parser.formJsonYaml("./src/test/resources/fixtures/file4recursive.json");
-        parsedFile3recursiveYaml = Parser.formJsonYaml("./src/test/resources/fixtures/file3recursive.yaml");
-        parsedFile4recursiveYaml = Parser.formJsonYaml("./src/test/resources/fixtures/file4recursive.yaml");
         //Ожидающие результаты
-        simpleFixture = Files.readString(Paths.get("src/test/resources/fixtures/simpleResult.txt"));
-        recursiveFixture = Files.readString(Paths.get("src/test/resources/fixtures/recursiveResult.txt"));
+        simpleResult = Files.readString(Paths.get("src/test/resources/fixtures/simpleResult.txt"));
+        recursiveResult = Files.readString(Paths.get("src/test/resources/fixtures/recursiveResult.txt"));
     }
 
     @Test
@@ -53,24 +51,23 @@ public class AppTest {
         var expected = parsedFile1;
         assertEquals(expected, actual);
     }
-
     @Test
     public void testDiffer() {
-        var actual = Differ.generate(parsedFile1, parsedFile2);
-        var expected = simpleFixture;
+        var actual = Differ.generate(filePath1simple, filePath2simple, "stylish");
+        var expected = simpleResult;
         assertEquals(expected, actual);
     }
 
     @Test
     public void testDifferRecursiveJson() {
-        var actual = Differ.generate(parsedFile3recursiveJson, parsedFile4recursiveJson);
-        var expected  = recursiveFixture;
+        var actual = Differ.generate(filePath3recursiveJson, filePath4recursiveJson, "stylish");
+        var expected  = recursiveResult;
         assertEquals(expected, actual);
     }
     @Test
     public void testDifferRecursiveYaml() {
-        var actual = Differ.generate(parsedFile3recursiveYaml, parsedFile4recursiveYaml);
-        var expected  = recursiveFixture;
+        var actual = Differ.generate(filePath3recursiveYaml, filePath4recursiveYaml, "stylish");
+        var expected  = recursiveResult;
         assertEquals(expected, actual);
     }
 }

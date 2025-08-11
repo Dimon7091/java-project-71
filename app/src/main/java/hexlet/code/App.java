@@ -21,10 +21,8 @@ public class App implements Runnable {
     private String format;
     @Override
     public void run() {
-
-        var filemap1 = Parser.formJsonYaml(filepath1);
-        var filemap2 = Parser.formJsonYaml(filepath2);
-        Differ.generate(filemap1, filemap2);
+        var diff = Differ.generate(filepath1, filepath2, format);
+        System.out.println(diff);
     }
 
     public static void main(String[] args) {
