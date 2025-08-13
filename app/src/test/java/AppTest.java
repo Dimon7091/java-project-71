@@ -21,6 +21,7 @@ public class AppTest {
     String filePath4recursiveYaml = "src/test/resources/fixtures/file4recursive.yaml";
     String simpleResult;
     String recursiveResult;
+    String plainResult;
 
     @BeforeEach
     public void preparationOfFixtures() throws Exception {
@@ -36,6 +37,7 @@ public class AppTest {
         //Ожидающие результаты
         simpleResult = Files.readString(Paths.get("src/test/resources/fixtures/simpleResult.txt"));
         recursiveResult = Files.readString(Paths.get("src/test/resources/fixtures/recursiveResult.txt"));
+        plainResult = Files.readString(Paths.get("src/test/resources/fixtures/plainResult.txt"));
     }
 
     @Test
@@ -68,6 +70,12 @@ public class AppTest {
     public void testDifferRecursiveYaml() {
         var actual = Differ.generate(filePath3recursiveYaml, filePath4recursiveYaml, "stylish");
         var expected  = recursiveResult;
+        assertEquals(expected, actual);
+    }
+    @Test
+    public void testDifferPlain() {
+        var actual = Differ.generate(filePath3recursiveJson, filePath4recursiveJson, "plain");
+        var expected = plainResult;
         assertEquals(expected, actual);
     }
 }
