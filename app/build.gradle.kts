@@ -7,7 +7,9 @@ plugins {
     checkstyle
     id("org.sonarqube") version "6.2.0.5505"
     jacoco
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
+
 sonar {
     properties {
         property("sonar.projectKey", "Dimon7091_java-project-71")
@@ -52,7 +54,13 @@ tasks.jacocoTestReport {
     }
     // если нужно, укажите дополнительные пути к исходникам и классам
 }
-
+tasks.jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes["Main-Class"] = "hexlet.code.App"
+    }
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+}
 application {
     mainClass = "hexlet.code.App"
 }

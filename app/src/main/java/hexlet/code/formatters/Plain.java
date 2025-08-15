@@ -1,61 +1,63 @@
 package hexlet.code.formatters;
 
+import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class Plain {
-    public static String format(Map<String, Object> map1, Map<String, Object> map2) {
+    public static String format(List<Map<String, Object>> diffList) {
 
-        var commonMap = new TreeMap<>(map2);
-        commonMap.putAll(map1);
-        StringBuilder string = new StringBuilder();
-        int counter = 0;
+        StringBuilder diffString = new StringBuilder();
 
-        for (Map.Entry<String, Object> entry : commonMap.entrySet()) {
-            var key = entry.getKey();
+        for (var node : diffList) {
+            var checker = false;
+            var type = node.get("type").toString();
+            var key = node.get("key");
+            var value = node.get("value").toString();
 
-            if (map1.containsKey(key) && map2.containsKey(key)) {
-                if (!map1.get(key).equals(map2.get(key))) {
-                    String value1 = map1.get(key).toString();
-                    String newValue = map2.get(key).toString();
-                    string.append("Property ").append("'").append(key).append("' ")
-                            .append("was updated. From ").append(strFormat(value1)).append(" to ")
-                            .append(strFormat(newValue));
-                    if (counter < commonMap.size() - 1) {
-                        string.append("\n");
-                    }
-                }
-            } else if (map1.containsKey(key) && !map2.containsKey(key)) {
-                string.append("Property ").append("'").append(key).append("' ").append("was removed");
-                if (counter < commonMap.size() - 1) {
-                    string.append("\n");
-                }
-            } else {
-                String value = map2.get(key).toString();
-                string.append("Property ").append("'").append(key).append("' ").append("was added with value: ")
-                        .append(strFormat(value));
-                if (counter < commonMap.size() - 1) {
-                    string.append("\n");
-                }
+            switch (type) {
+                case "changed":
+                    diffString.append("Property ").append("\'").append(key).append("\' ").append("was updated. ")
+                            .append("From ").append(valueFormat(value)).append(" to ")
+                            .append(valueFormat(node.get("new value").toString()));
+                    checker = true;
+                    break;
+                case "unchanged":
+                    break;
+                case "added":
+                    diffString.append("Property ").append("\'").append(key).append("\' ")
+                            .append("was added with value: ").append(valueFormat(value));
+                    checker = true;
+                    break;
+                case "deleted":
+                    diffString.append("Property ").append("\'").append(key).append("\' ")
+                            .append("was removed");
+                    checker = true;
+                    break;
+                default:
+                    throw new RuntimeException(type + " type not found");
             }
-            counter++;
+            if (checker) {
+                diffString.append("\n");
+            }
         }
-        System.out.println(string);
-        return string.toString();
+
+        if (!diffString.isEmpty() && diffString.charAt(diffString.length() - 1) == '\n') {
+            diffString.deleteCharAt(diffString.length() - 1);
+        }
+        return diffString.toString();
     }
 
-    public static String strFormat(String str) {
-        String editedString = "";
-        int lastChar = str.length() - 1;
+    public static String valueFormat(String str) {
+        String value = "";
         boolean onlyDigits = str.matches("\\d+");
-        if ((str.charAt(0) == '{') && (str.charAt(lastChar) == '}')
-                || (str.charAt(0) == '[') && (str.charAt(lastChar) == ']')) {
-            editedString += "[complex value]";
-        } else if (str == "true" || str == "false" || str == "null" || onlyDigits) {
-            editedString += str;
+        if (str.charAt(0) == '[' && str.charAt(str.length() - 1) == ']'
+                || str.charAt(0) == '{' && str.charAt(str.length() - 1) == '}') {
+            value += "[complex value]";
+        } else if (onlyDigits || str.equals("false") || str.equals("true") || str.equals("null")) {
+            value += str;
         } else {
-            editedString += "'" + str + "'";
+            value = "'" + str + "'";
         }
-        return editedString;
+        return value;
     }
 }

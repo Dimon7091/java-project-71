@@ -1,44 +1,38 @@
 package hexlet.code.formatters;
 
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class Stylish {
-    public static String format(Map<String, Object> map1, Map<String, Object> map2) {
+    public static String format(List<Map<String, Object>> diffList) {
 
-        var commonMap = new TreeMap<>(map2);
-        commonMap.putAll(map1);
-        var commonList = new LinkedList<>();
+        StringBuilder diffString = new StringBuilder();
+        diffString.append("{\n");
 
-        for (Map.Entry<String, Object> entry : commonMap.entrySet()) {
-            var key = entry.getKey();
-            var value = entry.getValue();
-            if (map1.containsKey(key) && map2.containsKey(key)) {
-                var map2Value = map2.get(key);
-                if (!value.equals(map2Value)) {
-                    commonList.add("  - " + key + ": " + value);
-                    commonList.add("  + " + key + ": " + map2Value);
-                } else {
-                    commonList.add("    " + key + ": " + value);
-                }
-            } else if (map1.containsKey(key) && !map2.containsKey(key)) {
-                commonList.add("  - " + key + ": " + value);
-            } else {
-                commonList.add("  + " + key + ": " + value);
+        for (var node : diffList) {
+            var type = node.get("type").toString();
+            var key = node.get("key");
+            var value = node.get("value");
+            switch (type) {
+                case "changed":
+                    diffString.append("  - ").append(key).append(": ").append(value).append("\n");
+                    diffString.append("  + ").append(key).append(": ").append(node.get("new value"));
+                    break;
+                case "unchanged":
+                    diffString.append("    ").append(key).append(": ").append(value);
+                    break;
+                case "added":
+                    diffString.append("  + ").append(key).append(": ").append(value);
+                    break;
+                case "deleted":
+                    diffString.append("  - ").append(key).append(": ").append(value);
+                    break;
+                default:
+                    throw new RuntimeException(type + " type not found");
             }
+            diffString.append("\n");
         }
-        commonList.addFirst("{");
-        commonList.addLast("}");
-
-        StringBuilder result = new StringBuilder();
-        for (var i = 0; i < commonList.size(); i++)  {
-            var lastLineIdx = commonList.size() - 1;
-            result.append(commonList.get(i));
-            if (!(lastLineIdx == i)) {
-                result.append("\n");
-            }
-        }
-        return result.toString();
+        diffString.append("}");
+        return diffString.toString();
     }
 }
