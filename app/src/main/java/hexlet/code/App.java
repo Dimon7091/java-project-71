@@ -20,9 +20,10 @@ public class App implements Runnable {
     @Option(names = {"-f", "--format"}, description = "output format [default: stylish]", defaultValue = "stylish")
     private String format;
     @Override
-    public void run() {
-        var diff = Differ.generate(filepath1, filepath2, format);
-        System.out.println(diff);
+    public final void run() {
+        String dif = null;
+        dif = Differ.generate(filepath1, filepath2, format);
+        System.out.println(dif);
     }
 
     public static void main(String[] args) {

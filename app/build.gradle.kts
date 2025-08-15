@@ -8,6 +8,7 @@ plugins {
     id("org.sonarqube") version "6.2.0.5505"
     jacoco
 }
+
 sonar {
     properties {
         property("sonar.projectKey", "Dimon7091_java-project-71")
@@ -28,8 +29,9 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation(platform("org.junit:junit-bom:5.13.4"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("org.apache.commons:commons-lang3:3.18.0")
     implementation("info.picocli:picocli:4.7.7")
     annotationProcessor ("info.picocli:picocli-codegen:4.7.7")
@@ -52,7 +54,6 @@ tasks.jacocoTestReport {
     }
     // если нужно, укажите дополнительные пути к исходникам и классам
 }
-
 application {
     mainClass = "hexlet.code.App"
 }

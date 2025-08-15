@@ -10,9 +10,9 @@ import java.util.Map;
 
 public class Parser {
     public static Map<String, Object> formJsonYaml(String filepath) {
-        String format = filepath.substring(filepath.length() - 4);
+        final String formatOfFile = filepath.substring(filepath.length() - 4);
         Map<String, Object> filemap = null;
-        if (format.equals("json")) {
+        if (formatOfFile.equals("json")) {
             File file1 = new File(filepath);
             ObjectMapper jsonMapper = new ObjectMapper();
             try {
@@ -21,7 +21,7 @@ public class Parser {
             } catch (IOException e) {
                 System.err.println("Файл 1 не найден");
             }
-        } else if (format.equals("yaml") || format.equals(".yml")) {
+        } else if (formatOfFile.equals("yaml") || formatOfFile.equals(".yml")) {
             File file1 = new File(filepath);
             ObjectMapper yamlMapper = new YAMLMapper();
             try {
